@@ -1,0 +1,14 @@
+{
+    "id": "{ECFC9990-1D20-F905-8E65-E1E671048B32}",
+    "name": "Reolink NVR",
+    "type": 3,
+    "vendor": "Reolink",
+    "aliases":
+    [
+        "Reolink NVR"
+    ],  
+    "parentRequirements": [], 
+    "childRequirements": [],                                          
+    "implemented": [],  
+    "prefix": "ReolinkNVR"
+}
