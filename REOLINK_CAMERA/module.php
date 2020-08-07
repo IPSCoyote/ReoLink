@@ -25,21 +25,30 @@
         }
  
         public function ApplyChanges() {
-          /* Called on 'apply changes' in the configuration UI and after creation of the instance */
+            /* Called on 'apply changes' in the configuration UI and after creation of the instance */
           
-          $this->toDebugLog( "ApplyChanges called" );
-          
-          parent::ApplyChanges(); 
+            $this->toDebugLog( "ApplyChanges called" );
+                      
+            SetValue($this->GetIDForIdent("motionDetected"), true );   
+            
+            parent::ApplyChanges(); 
 
-          // Generate Profiles & Variables
-          $this->registerProfiles();
-          $this->registerVariables();  
+            // Generate Profiles & Variables
+            $this->registerProfiles();
+            $this->registerVariables();  
 
-		  // check configuration
-		  $this->checkConfiguration();
-
-          // Set Data to Variables (and update timer)
-          // $this->Update();
+		    // check configuration
+		    $this->checkConfiguration();
+		  
+            // Set Timer
+            if ( $this->ReadPropertyInteger("UpdateFrequency") > 0 ) {
+                $this->SetTimerInterval("ReolinkCamera_UpdateTimer", $this->ReadPropertyInteger("UpdateFrequency")*1000);
+            } else { 
+                $this->SetTimerInterval("ReolinkCamera_UpdateTimer", 0 );
+            }
+               
+            // Set Data to Variables (and update timer)
+            // $this->Update();
         } 
         
         public function Destroy() {
@@ -62,13 +71,6 @@
             // write values into variables
             /* SetValue($this->GetIDForIdent("status"),                  $goEChargerStatus->{'car'});    */
                 
-            // Set Timer
-            if ( $this->ReadPropertyInteger("UpdateFrequency") > 0 ) {
-              $this->SetTimerInterval("ReolinkCamera_UpdateTimer", $this->ReadPropertyInteger("UpdateFrequency")*1000);
-            } else { 
-              $this->SetTimerInterval("ReolinkCamera_UpdateTimer", 0 );
-            }
-
             return true;
         }
                
@@ -81,7 +83,7 @@
             
             // get IP of Device from configuration
             $IPAddress = trim($this->ReadPropertyString("IPAddressDevice"));
-            
+
             // check if IP is ocnfigured and valid
             if ( $IPAddress == "0.0.0.0" ) {
                 $this->SetStatus(200); // no configuration done
