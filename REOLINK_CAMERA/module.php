@@ -18,6 +18,7 @@
           $this->RegisterPropertyString("Password", "" );
           $this->RegisterPropertyBoolean("AdminUser", false );
           $this->RegisterPropertyInteger("UpdateFrequency", 0);  
+          $this->RegisterPropertyBoolean("DebugLog", false );
             
           // Timer
           $this->RegisterTimer("ReolinkCamera_UpdateTimer", 0, 'ReolinkCamera_Update($_IPS[\'TARGET\']);');
@@ -97,14 +98,14 @@
             }
 
             // Try test login and gather user data
-            $LoginToken = ReolinkLogin( $IPAddress, trim($this->ReadPropertyString("Username")), trim($this->ReadPropertyString("Password")) );      
+            $LoginToken = ReolinkLogin( trim($this->ReadPropertyString("Username")), trim($this->ReadPropertyString("Password")) );      
             if ( $LoginToken === false ) {
                 $this->SetStatus(206); // No Login possible
             } else {
                 // get user data
                 
                 // logout
-                if ( ReolinkLogout( $url, $LoginToken ) == false ) {
+                if ( ReolinkLogout( $LoginToken ) == false ) {
                     echo "Logout failed";
                     return false;
                 }
@@ -154,8 +155,8 @@
         
         
         /*=== REOLINK NATIVE FUNCTIONS ============== */
-        protected function ReolinkLogin( $ip, $username, $password ) {
-            $ch = curl_init( "http://".$ip."/api.cgi?cmd=Login" );
+        protected function ReolinkLogin( $username, $password ) {
+            $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=Login" );
             $command["cmd"] = "Login";
             $command["param"]["User"]["userName"] = $username;
             $command["param"]["User"]["password"] = $password;
@@ -168,25 +169,29 @@
             $responseArray = json_decode( $response, true );
             curl_close( $ch );
             if (isset( $responseArray[0]["value"]["Token"]["name"] ) ) {
+                $this->toDebugLog( "Token Received" );
                 return $responseArray[0]["value"]["Token"]["name"];
             } else {
+                $this->toDebugLog( "Login failed" );
                 return false;
             }
         }
 
-        protected function ReolinkLogout( $ip, $Token ) {
-            $file = "http://".$ip."/api.cgi?cmd=Logout&token=".$Token;
+        protected function ReolinkLogout( $Token ) {
+            $file = "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=Logout&token=".$Token;
             $response = file_get_contents( $file );
             $responseArray = json_decode( $response, true );
             if (isset( $responseArray[0]["code"] ) ) {
                 return !$responseArray[0]["code"];
+                $this->toDebugLog( "Logout successfull" );
             } else {
+                $this->toDebugLog( "Logout failed" );
                 return false;
             }
         }
 
-        protected function ReolinkGetMdState( $ip, $Token, $channel = 0 ) {
-            $ch = curl_init( "http://".$ip."/api.cgi?cmd=GetMdState&token=".$Token );
+        protected function ReolinkGetMdState( $Token, $channel = 0 ) {
+            $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=GetMdState&token=".$Token );
             $command["cmd"] = "GetMdState";
             $command["param"]["channel"] = $channel;
             $jsonParam = "[".json_encode( $command )."]";
@@ -199,12 +204,22 @@
             curl_close( $ch );
             if (isset( $responseArray[0]["code"] ) ) {
                 if ( $responseArray[0]["code"] == 0 ) {
+                    $this->toDebugLog( "Motion detection status retrieved" );
                     return $responseArray[0]["value"]["state"];
                 } else
+                    $this->toDebugLog( "Motion detection status could not be retrieved" );
                     return false;
             } else {
+                $this->toDebugLog( "No data received on Motion detection status retrieval" );
                 return false;
             }
         }
+        
+        protected function toDebugLog( $string ) {
+          if ( $this->ReadPropertyBoolean("DebugLog") == true ) {
+              $this->SendDebug( "Reolink Camera", $string );
+          }
+        }
+        
     }
 ?>

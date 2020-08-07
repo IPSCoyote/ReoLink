@@ -9,6 +9,8 @@
             
             "Basic Data": "Grunddaten",
             "seconds": "Sekunden",
+            "Other": "Sonstiges",
+            "Debug Log": "Debug Log",
             
             "Check Connection": "Verbindung testen",
             "Device identified": "Reolink Kamera gefunden",
