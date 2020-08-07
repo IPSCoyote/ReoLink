@@ -6,7 +6,7 @@
       { "type": "Label", "caption": "   " },
       { "type": "Label", "label": "Basic Data" },
       { "type": "ValidationTextBox", "name": "IPAddressDevice", "caption": "IP Address" },
-      { "type": "NumberSpinner", "name": "UpdateFrequency", "value": 0, "caption": "Update Frequency", "digits": 0 , "hex": false, "suffix": "seconds", 0, 60 },
+      { "type": "NumberSpinner", "name": "UpdateFrequency", "value": 0, "caption": "Update Frequency", "digits": 0 , "hex": false, "suffix": "seconds", 0, 60 }
     ],
     "status":   
     [
