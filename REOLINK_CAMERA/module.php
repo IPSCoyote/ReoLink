@@ -26,10 +26,7 @@
  
         public function ApplyChanges() {
             /* Called on 'apply changes' in the configuration UI and after creation of the instance */
-          
             $this->toDebugLog( "ApplyChanges called" );
-                      
-            SetValue($this->GetIDForIdent("motionDetected"), true );   
             
             parent::ApplyChanges(); 
 
@@ -87,21 +84,25 @@
             // check if IP is ocnfigured and valid
             if ( $IPAddress == "0.0.0.0" ) {
                 $this->SetStatus(200); // no configuration done
+                $this->toDebugLog( "IP not configured" );
                 return false;
             } elseif (filter_var($IPAddress, FILTER_VALIDATE_IP) == false) { 
                 $this->SetStatus(201); // no valid IP configured
+                $this->toDebugLog( "IP Invalid" );
                 return false;
             }
             
             // check if any HTTP device on IP can be reached
             if ( $this->ping( $IPAddress, 80, 1 ) == false ) {
                 $this->SetStatus(202); // no http response
+                $this->toDebugLog( "No ping on IP" );
                 return false;
             }
             
             // check user name and login
             if ( ( trim($this->ReadPropertyString("Username")) == "" ) or ( trim($this->ReadPropertyString("Password")) == "" ) ) {
                 $this->SetStatus(205); // Invalid or No User Data
+                $this->toDebugLog( "No User Data specified" );
                 return false;   
             }
 
@@ -109,6 +110,8 @@
             $LoginToken = ReolinkLogin( trim($this->ReadPropertyString("Username")), trim($this->ReadPropertyString("Password")) );      
             if ( $LoginToken === false ) {
                 $this->SetStatus(206); // No Login possible
+                $this->toDebugLog( "No Login possible" );
+                return false;
             } else {
                 // get user data
                 
@@ -120,6 +123,7 @@
             }
                    
             $this->SetStatus(102);
+            $this->toDebugLog( "Configuration ok" );
             return true;
         }
         
