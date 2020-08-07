@@ -228,7 +228,7 @@
         
         protected function toDebugLog( $string ) {
           if ( $this->ReadPropertyBoolean("DebugLog") == true ) {
-              $this->SendDebug( "Reolink Camera", $string );
+              $this->SendDebug( "Reolink Camera", $string, 0 );
           }
         }
         
