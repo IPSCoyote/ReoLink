@@ -13,7 +13,10 @@
           parent::Create(); 
             
           // Properties of the Module
-          $this->RegisterPropertyString("IPAddressDevice", "0.0.0.0"); 
+          $this->RegisterPropertyString("IPAddressDevice", "0.0.0.0" ); 
+          $this->RegisterPropertyString("Username", "" );
+          $this->RegisterPropertyString("Password", "" );
+          $this->RegisterPropertyBoolean("AdminUser", false );
           $this->RegisterPropertyInteger("UpdateFrequency", 0);  
             
           // Timer
@@ -32,7 +35,7 @@
 		  $this->checkConfiguration();
 
           // Set Data to Variables (and update timer)
-          $this->Update();
+          // $this->Update();
         } 
         
         public function Destroy() {
@@ -86,7 +89,27 @@
                 $this->SetStatus(202); // no http response
                 return false;
             }
-                          
+            
+            // check user name and login
+            if ( ( trim($this->ReadPropertyString("Username")) == "" ) or ( trim($this->ReadPropertyString("Password")) == "" ) ) {
+                $this->SetStatus(205); // Invalid or No User Data
+                return false;   
+            }
+
+            // Try test login and gather user data
+            $LoginToken = ReolinkLogin( $IPAddress, trim($this->ReadPropertyString("Username")), trim($this->ReadPropertyString("Password")) );      
+            if ( $LoginToken === false ) {
+                $this->SetStatus(206); // No Login possible
+            } else {
+                // get user data
+                
+                // logout
+                if ( ReolinkLogout( $url, $LoginToken ) == false ) {
+                    echo "Logout failed";
+                    return false;
+                }
+            }
+                   
             $this->SetStatus(102);
             return true;
         }
@@ -94,21 +117,7 @@
         protected function getStatusFromCamera() {
             // get IP of Device from configuration
             $IPAddress = trim($this->ReadPropertyString("IPAddressDevice"));
-            
-            // check if IP is ocnfigured and valid
-            if ( $IPAddress == "0.0.0.0" ) {
-                $this->SetStatus(200); // no configuration done
-                return false;
-            } elseif (filter_var($IPAddress, FILTER_VALIDATE_IP) == false) { 
-                $this->SetStatus(201); // no valid IP configured
-                return false;
-            }
-            
-            // check if any HTTP device on IP can be reached
-            if ( $this->ping( $IPAddress, 80, 1 ) == false ) {
-                $this->SetStatus(202); // no http response
-                return false;
-            }
+              
                           
             $this->SetStatus(102);
             return true;        }
@@ -141,6 +150,61 @@
             //--- Basic Information -------------------------------------------------------------
             $this->RegisterVariableBoolean("motionDetected", "Bewegung","~Motion",11);
             
+        }
+        
+        
+        /*=== REOLINK NATIVE FUNCTIONS ============== */
+        protected function ReolinkLogin( $ip, $username, $password ) {
+            $ch = curl_init( "http://".$ip."/api.cgi?cmd=Login" );
+            $command["cmd"] = "Login";
+            $command["param"]["User"]["userName"] = $username;
+            $command["param"]["User"]["password"] = $password;
+            $jsonParam = "[".json_encode( $command )."]";
+            curl_setopt($ch, CURLOPT_POST, 1) ;
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonParam );
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json') );
+            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+            $response = curl_exec($ch); 
+            $responseArray = json_decode( $response, true );
+            curl_close( $ch );
+            if (isset( $responseArray[0]["value"]["Token"]["name"] ) ) {
+                return $responseArray[0]["value"]["Token"]["name"];
+            } else {
+                return false;
+            }
+        }
+
+        protected function ReolinkLogout( $ip, $Token ) {
+            $file = "http://".$ip."/api.cgi?cmd=Logout&token=".$Token;
+            $response = file_get_contents( $file );
+            $responseArray = json_decode( $response, true );
+            if (isset( $responseArray[0]["code"] ) ) {
+                return !$responseArray[0]["code"];
+            } else {
+                return false;
+            }
+        }
+
+        protected function ReolinkGetMdState( $ip, $Token, $channel = 0 ) {
+            $ch = curl_init( "http://".$ip."/api.cgi?cmd=GetMdState&token=".$Token );
+            $command["cmd"] = "GetMdState";
+            $command["param"]["channel"] = $channel;
+            $jsonParam = "[".json_encode( $command )."]";
+            curl_setopt($ch, CURLOPT_POST, 1) ;
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonParam );
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json') );
+            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+            $response = curl_exec($ch); 
+            $responseArray = json_decode( $response, true );
+            curl_close( $ch );
+            if (isset( $responseArray[0]["code"] ) ) {
+                if ( $responseArray[0]["code"] == 0 ) {
+                    return $responseArray[0]["value"]["state"];
+                } else
+                    return false;
+            } else {
+                return false;
+            }
         }
     }
 ?>

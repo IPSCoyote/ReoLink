@@ -5,6 +5,8 @@
       { "type": "Label", "caption": "   " },
       { "type": "Label", "label": "Basic Data" },
       { "type": "ValidationTextBox", "name": "IPAddressDevice", "caption": "IP Address" },
+      { "type": "ValidationTextBox", "name": "Username", "caption": "Username" },
+      { "type": "Password", "name": "Passwort", "caption": "Password" },
       { "type": "NumberSpinner", "name": "UpdateFrequency", "value": 0, "caption": "Update Frequency", "digits": 0 , "hex": false, "suffix": "seconds", "minimum": 0, "maximum": 60 }
     ],
 
@@ -14,6 +16,8 @@
       { "code": 201, "icon": "error",       "caption": "IP invalid" },
       { "code": 202, "icon": "error",       "caption": "No device found on IP" },
       { "code": 203, "icon": "error",       "caption": "No Data returned from IP" },
-      { "code": 204, "icon": "error",       "caption": "No Reolink Camera available at IP" }
+      { "code": 204, "icon": "error",       "caption": "No Reolink Camera available at IP" },
+      { "code": 205, "icon": "error",       "caption": "Invalid or No User Data" },
+      { "code": 206, "icon": "error",       "caption": "No Login possible" }
     ]
 }
