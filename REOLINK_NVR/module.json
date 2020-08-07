@@ -5,7 +5,7 @@
     "vendor": "Reolink",
     "aliases":
     [
-        "Reolink NVR"
+        "Reolink Kameraserver (NVR)"
     ],  
     "parentRequirements": [], 
     "childRequirements": [],                                          

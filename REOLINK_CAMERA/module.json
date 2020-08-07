@@ -1,11 +1,11 @@
 {
     "id": "{BCE04940-CFC9-7196-7FD7-261A6A242C66}",
-    "name": "Reolink Kamera",
+    "name": "Reolink Camera",
     "type": 3,
     "vendor": "Reolink",
     "aliases":
     [
-        "Reolink Kamera"
+        "Reolink Einzelkamera"
     ],  
     "parentRequirements": [], 
     "childRequirements": [],                                          

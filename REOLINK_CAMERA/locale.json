@@ -1,0 +1,17 @@
+{
+    "translations": {
+        "de": { 
+            "Disclaimer": "Dieses Modul wurde unabhängig vom Hersteller RCT Power entwickelt. Die Benutzung des Moduls erfolgt auf eigene Gefahr unter Ausschluss jeglicher Gewährleistung für Probleme oder Schäden am RCT Power System.", 
+            "IPAddressDevice": "IP Adresse der Kamera",
+            "UpdateFrequency": "Update Interval",
+            
+            "Check Connection": "Verbindung testen",
+            "Device identified": "Reolink Kamera gefunden",
+            "Configuration missing": "Konfiguration fehlt",
+            "IP invalid": "IP Adresse ungültig",
+            "No device found on IP": "Kein Gerät antwortet an der IP Adresse",
+            "No Data returned from IP": "Keine Daten von IP Adresse geliefert",
+            "No Relink Camera available at IP": "Keine Reolink Kamera an IP Adresse erreichbar"
+        }
+    }
+}
