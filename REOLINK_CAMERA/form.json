@@ -7,7 +7,7 @@
       { "type": "ValidationTextBox", "name": "IPAddressDevice", "caption": "IP Address" },
       { "type": "ValidationTextBox", "name": "Username", "caption": "Username" },
       { "type": "PasswordTextBox", "name": "Passwort", "caption": "Password" },
-      { "type": "NumberSpinner", "name": "UpdateFrequency", "value": 0, "caption": "Update Frequency", "digits": 0 , "hex": false, "suffix": "seconds", "minimum": 0, "maximum": 60 }
+      { "type": "NumberSpinner", "name": "UpdateFrequency", "value": 0, "caption": "Update Frequency", "digits": 0 , "hex": false, "suffix": "seconds", "minimum": 0, "maximum": 60 },
       { "type": "Label", "caption": "   " },
       { "type": "Label", "label": "Other" },
       { "type": "CheckBox", "name": "DebugLog", "caption": "Debug Log" }
