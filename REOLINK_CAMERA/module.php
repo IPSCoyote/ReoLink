@@ -26,6 +26,9 @@
  
         public function ApplyChanges() {
           /* Called on 'apply changes' in the configuration UI and after creation of the instance */
+          
+          $this->toDebugLog( "ApplyChanges called" );
+          
           parent::ApplyChanges(); 
 
           // Generate Profiles & Variables
@@ -50,7 +53,8 @@
         */
         
         public function Update() {
-        	
+        	$this->toDebugLog( "Update called" );
+
             /* Check the connection to the go-eCharger */
             $reolinkCameraStatus = $this->getStatusFromCamera();
             if ( $reolinkCameraStatus == false ) { return false; }
