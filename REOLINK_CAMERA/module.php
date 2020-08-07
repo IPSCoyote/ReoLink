@@ -19,6 +19,12 @@
           $this->RegisterPropertyBoolean("AdminUser", false );
           $this->RegisterPropertyInteger("UpdateFrequency", 0);  
           $this->RegisterPropertyBoolean("DebugLog", false );
+          
+          // Login handling für method UPDATE
+          $this->RegisterPropertyString("LoginToken", "" );
+          $this->RegisterPropertyString("LoginTimestamp", "" );
+
+
             
           // Timer
           $this->RegisterTimer("ReolinkCamera_UpdateTimer", 0, 'ReolinkCamera_Update($_IPS[\'TARGET\']);');
@@ -110,15 +116,11 @@
             $LoginToken = $this->ReolinkLogin( trim($this->ReadPropertyString("Username")), trim($this->ReadPropertyString("Password")) );      
             if ( $LoginToken === false ) {
                 $this->SetStatus(206); // No Login possible
-                $this->toDebugLog( "No Login possible" );
                 return false;
             } else {
-                // get user data
-                
                 // logout
                 if ( $this->ReolinkLogout( $LoginToken ) == false ) {
-                    echo "Logout failed";
-                    return false;
+                       return false;
                 }
             }
                    
@@ -198,8 +200,9 @@
             $response = file_get_contents( $file );
             $responseArray = json_decode( $response, true );
             if (isset( $responseArray[0]["code"] ) ) {
-                return !$responseArray[0]["code"];
                 $this->toDebugLog( "Logout successfull" );
+                return !$responseArray[0]["code"];
+
             } else {
                 $this->toDebugLog( "Logout failed" );
                 return false;
@@ -229,6 +232,51 @@
             } else {
                 $this->toDebugLog( "No data received on Motion detection status retrieval" );
                 return false;
+            }
+        }
+        
+        protected function ReolinkGetAbility( $Token, $username ) {
+            $this->toDebugLog( "ReolinkGetAbility called" );
+            $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=GetAbility&token=".$Token );
+            $command["cmd"] = "GetAbility";
+            $command["param"]["User"]["userName"] = $username;
+            $jsonParam = "[".json_encode( $command )."]";
+            curl_setopt($ch, CURLOPT_POST, 1) ;
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonParam );
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json') );
+            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+            $response = curl_exec($ch); 
+            $responseArray = json_decode( $response, true );
+            curl_close( $ch );
+            if (isset( $responseArray[0]["code"] ) ) {
+                if ( $responseArray[0]["code"] == 0 ) {
+                return $responseArray[0]["value"]["Ability"];
+                } else
+                    return false;
+            } else {
+            return false;
+            }
+        }
+        
+        protected function ReolinkGetDevInfo( $Token ) {
+            $this->toDebugLog( "ReolinkGetDevInfo called" );
+            $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=GetDevInfo&token=".$Token );
+            $command["cmd"] = "GetDevInfo";
+            $jsonParam = "[".json_encode( $command )."]";
+            curl_setopt($ch, CURLOPT_POST, 1) ;
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonParam );
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json') );
+            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+            $response = curl_exec($ch); 
+            $responseArray = json_decode( $response, true );
+            curl_close( $ch );
+            if (isset( $responseArray[0]["code"] ) ) {
+                if ( $responseArray[0]["code"] == 0 ) {
+                return $responseArray[0]["value"]["DevInfo"];
+                } else
+                    return false;
+            } else {
+            return false;
             }
         }
         
