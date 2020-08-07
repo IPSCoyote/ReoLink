@@ -88,7 +88,7 @@
             }
                           
             $this->SetStatus(102);
-            return $goEChargerStatus;
+            return true;
         }
         
         protected function getStatusFromCamera() {
@@ -111,8 +111,7 @@
             }
                           
             $this->SetStatus(102);
-            return $goEChargerStatus;
-        }
+            return true;        }
         
        
         
