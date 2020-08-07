@@ -18,7 +18,7 @@
             "No Data returned from IP": "Keine Daten von IP Adresse geliefert",
             "No Relink Camera available at IP": "Keine Reolink Kamera an IP Adresse erreichbar",
             "Invalid or No User Data": "Ungültige oder keine Benutzerdaten",
-            "No Login possible": "Keine Anmeldung möglich (Benutzername und/oder Password richtig?)",
+            "No Login possible": "Keine Anmeldung möglich (Benutzername und/oder Password richtig?)"
         }
     }
 }
