@@ -43,7 +43,7 @@
         } 
         
         public function Destroy() {
-            $this->UnregisterTimer("ReolinkCamera_UpdateTimer");
+            $this->RegisterTimer( "ReolinkCamera_UpdateTimer", 0 );
             // Never delete this line!
             parent::Destroy();
         }
