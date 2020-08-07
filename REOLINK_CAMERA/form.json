@@ -10,7 +10,7 @@
       { "type": "NumberSpinner", "name": "UpdateFrequency", "value": 0, "caption": "Update Frequency", "digits": 0 , "hex": false, "suffix": "seconds", "minimum": 0, "maximum": 60 }
       { "type": "Label", "caption": "   " },
       { "type": "Label", "label": "Other" },
-      { "type": "Checkbox", "name": "DebugLog", "caption": "Debug Log" }
+      { "type": "CheckBox", "name": "DebugLog", "caption": "Debug Log" }
     ],
 
     "status":   
