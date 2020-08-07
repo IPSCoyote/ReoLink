@@ -5,6 +5,8 @@
             "IPAddressDevice": "IP Adresse der Kamera",
             "UpdateFrequency": "Update Interval",
             
+            "seconds": "Sekunden",
+            
             "Check Connection": "Verbindung testen",
             "Device identified": "Reolink Kamera gefunden",
             "Configuration missing": "Konfiguration fehlt",
