@@ -107,7 +107,7 @@
             }
 
             // Try test login and gather user data
-            $LoginToken = ReolinkLogin( trim($this->ReadPropertyString("Username")), trim($this->ReadPropertyString("Password")) );      
+            $LoginToken = $this->ReolinkLogin( trim($this->ReadPropertyString("Username")), trim($this->ReadPropertyString("Password")) );      
             if ( $LoginToken === false ) {
                 $this->SetStatus(206); // No Login possible
                 $this->toDebugLog( "No Login possible" );
@@ -116,7 +116,7 @@
                 // get user data
                 
                 // logout
-                if ( ReolinkLogout( $LoginToken ) == false ) {
+                if ( $this->ReolinkLogout( $LoginToken ) == false ) {
                     echo "Logout failed";
                     return false;
                 }
