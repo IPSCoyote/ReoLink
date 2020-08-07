@@ -16,7 +16,9 @@
             "IP invalid": "IP Adresse ungültig",
             "No device found on IP": "Kein Gerät antwortet an der IP Adresse",
             "No Data returned from IP": "Keine Daten von IP Adresse geliefert",
-            "No Relink Camera available at IP": "Keine Reolink Kamera an IP Adresse erreichbar"
+            "No Relink Camera available at IP": "Keine Reolink Kamera an IP Adresse erreichbar",
+            "Invalid or No User Data": "Ungültige oder keine Benutzerdaten",
+            "No Login possible": "Keine Anmeldung möglich (Benutzername und/oder Password richtig?)",
         }
     }
 }
