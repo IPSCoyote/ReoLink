@@ -5,6 +5,7 @@
             "IPAddressDevice": "IP Adresse der Kamera",
             "UpdateFrequency": "Update Interval",
             
+            "Basic Data": "Grunddaten",
             "seconds": "Sekunden",
             
             "Check Connection": "Verbindung testen",
