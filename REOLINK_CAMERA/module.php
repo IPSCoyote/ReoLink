@@ -73,6 +73,8 @@
         */
         
         protected function checkConfiguration() {
+            $this->toDebugLog( "checkConfiguration called" );
+            
             // get IP of Device from configuration
             $IPAddress = trim($this->ReadPropertyString("IPAddressDevice"));
             
@@ -116,6 +118,8 @@
         }
         
         protected function getStatusFromCamera() {
+            $this->toDebugLog( "getStatusFromCamera called" );
+            
             // get IP of Device from configuration
             $IPAddress = trim($this->ReadPropertyString("IPAddressDevice"));
               
@@ -156,6 +160,7 @@
         
         /*=== REOLINK NATIVE FUNCTIONS ============== */
         protected function ReolinkLogin( $username, $password ) {
+            $this->toDebugLog( "ReolinkLogin called" );
             $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=Login" );
             $command["cmd"] = "Login";
             $command["param"]["User"]["userName"] = $username;
@@ -178,6 +183,7 @@
         }
 
         protected function ReolinkLogout( $Token ) {
+            $this->toDebugLog( "ReolinkLogout called" );
             $file = "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=Logout&token=".$Token;
             $response = file_get_contents( $file );
             $responseArray = json_decode( $response, true );
@@ -191,6 +197,7 @@
         }
 
         protected function ReolinkGetMdState( $Token, $channel = 0 ) {
+            $this->toDebugLog( "ReolinkGetMdState called" );
             $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=GetMdState&token=".$Token );
             $command["cmd"] = "GetMdState";
             $command["param"]["channel"] = $channel;
