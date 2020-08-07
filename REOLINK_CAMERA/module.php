@@ -52,14 +52,7 @@
             if ( $reolinkCameraStatus == false ) { return false; }
        
             // write values into variables
-            SetValue($this->GetIDForIdent("status"),                  $goEChargerStatus->{'car'});    
-            SetValue($this->GetIDForIdent("availableAMP"),            $goEChargerStatus->{'amp'}); 
-            SetValue($this->GetIDForIdent("error"),                   $goEChargerStatus->{'err'}); 
-            SetValue($this->GetIDForIdent("accessControl"),           $goEChargerStatus->{'ast'});
-            SetValue($this->GetIDForIdent("accessState"),             $goEChargerStatus->{'alw'}); 
-            SetValue($this->GetIDForIdent("cableCapability"),         $goEChargerStatus->{'cbl'});
-            SetValue($this->GetIDForIdent("rebootCounter"),           $goEChargerStatus->{'rbc'});
-            SetValue($this->GetIDForIdent("rebootTime"), date( DATE_RFC822, time()-round($goEChargerStatus->{'rbt'}/1000,0)) );
+            /* SetValue($this->GetIDForIdent("status"),                  $goEChargerStatus->{'car'});    */
                 
             // Set Timer
             if ( $this->ReadPropertyInteger("UpdateFrequency") > 0 ) {
@@ -148,7 +141,6 @@
             
             //--- Basic Information -------------------------------------------------------------
             $this->RegisterVariableBoolean("motionDetected", "Bewegung","~Motion",11);
-            $this->EnableAction("accessState");   
             
         }
     }
