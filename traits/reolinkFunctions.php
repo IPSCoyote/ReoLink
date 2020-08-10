@@ -105,7 +105,7 @@
             
             $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=GetAbility&token=".$this->ReadAttributeString("Token" ) );
             $command["cmd"] = "GetAbility";
-            $command["param"]["User"]["userName"] = trim($this->ReadPropertyString("Username");
+            $command["param"]["User"]["userName"] = trim($this->ReadPropertyString("Username"));
             $jsonParam = "[".json_encode( $command )."]"; 
             curl_setopt($ch, CURLOPT_POST, 1) ;
             curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonParam );
