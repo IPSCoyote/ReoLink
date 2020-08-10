@@ -89,10 +89,10 @@
                 $ChannelCount = $DeviceInfo["channelNum"];
             }
 
-            /* Login to Camera - here a token is reused, of not logged out before!  */
+            /* Login to NVR - here a token is reused, of not logged out before!  */
             if ( $this->ReolinkLogin( trim($this->ReadPropertyString("Username")), trim($this->ReadPropertyString("Password")) ) === true ) {
                 // Get MD State
-                for ( $currentChannel=0; $currentChannel<$ChannelCount; $x++ ) {
+                for ( $currentChannel=0; $currentChannel<$ChannelCount; $currentChannel++ ) {
                   $Ident = "motionDetected_Channel_".$currentChannel;        
                   SetValue($this->GetIDForIdent($Ident), $this->ReolinkGetMdState( $currentChannel ) );
                 }
@@ -205,6 +205,10 @@
             }
         }
         
-        
+        protected function toDebugLog( $string ) {
+          if ( $this->ReadPropertyBoolean("DebugLog") == true ) {
+              $this->SendDebug( "Reolink NVR", $string, 0 );
+          }
+        }
     }
 ?>
