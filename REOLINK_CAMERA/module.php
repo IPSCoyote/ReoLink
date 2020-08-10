@@ -2,10 +2,10 @@
 
     /*=== INCLUDE TRAITS =============================*/
     /*=== COMMON FUNCTIONS ========================== */
-    include ( "../common/commonFunctions.php ");
+    include( "../../traits/commonFunctions.php " );
     
     /*=== COMMON FUNCTIONS ========================== */
-    include '../common/reolinkFunctions.php';
+    include("../../traits/reolinkFunctions.php" );
 
     class ReolinkCamera extends IPSModule {
  
