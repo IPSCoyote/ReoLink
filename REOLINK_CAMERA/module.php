@@ -5,7 +5,7 @@
     include __DIR__ . '/../traits/commonFunctions.php';
     
     /*=== COMMON FUNCTIONS ========================== */
-    include "../traits/reolinkFunctions.php";
+    include __DIR__ . '/../traits/reolinkFunctions.php';
 
     class ReolinkCamera extends IPSModule {
  
