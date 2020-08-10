@@ -117,7 +117,7 @@
             }
             
             // logout first (if possible) as user/password might have changed
-            $this->ReolinkLogout( )
+            $this->ReolinkLogout( );
             
             // check user name and login
             if ( ( trim($this->ReadPropertyString("Username")) == "" ) or ( trim($this->ReadPropertyString("Password")) == "" ) ) {
