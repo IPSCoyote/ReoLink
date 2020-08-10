@@ -146,15 +146,13 @@
                 $this->ReolinkGetAbility();
                 $this->ReolinkGetDevInfo();
                 
-                
-                
                 // logout
                 if ( $this->ReolinkLogout() == false ) {
                        return false;
                 }
             }
                    
-            $DeviceInfo = json_decode( $this->ReadAttributeString( "DeviceInfo" ) );
+            $DeviceInfo = json_decode( $this->ReadAttributeString( "DeviceInfo" ), true );
             if ( ( !isset( $DeviceInfo["channelNum"] ) ) OR 
                  ( $DeviceInfo["channelNum"] != 1 ) ) {
               // device is no Camera (more than 1 camera channel)

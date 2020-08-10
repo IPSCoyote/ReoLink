@@ -151,7 +151,7 @@
                 }
             }
                    
-            $DeviceInfo = json_decode( $this->ReadAttributeString( "DeviceInfo" ) );
+            $DeviceInfo = json_decode( $this->ReadAttributeString( "DeviceInfo" ), true );
             if ( ( !isset( $DeviceInfo["channelNum"] ) ) OR 
                  ( $DeviceInfo["channelNum"] <= 1 ) ) {
               // device is no NVR (only one camera channel)

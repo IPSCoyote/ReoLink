@@ -148,7 +148,6 @@
             if (isset( $responseArray[0]["code"] ) ) {
                 if ( $responseArray[0]["code"] == 0 ) {
                     $this->WriteAttributeString( "DeviceInfo", json_encode( $responseArray[0]["value"]["DevInfo"] ) );
-
                 return true;
                 } else
                     return false;
