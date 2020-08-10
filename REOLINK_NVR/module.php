@@ -102,7 +102,7 @@
             }
 
             /* Log out, if time is not active */
-            if ( $this->GetTimerInterval( "ReolinkCamera_UpdateTimer" ) == 0 ) {
+            if ( $this->GetTimerInterval( "ReolinkNVR_UpdateTimer" ) == 0 ) {
                 $this->ReolinkLogout();
             }
  
