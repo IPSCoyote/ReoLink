@@ -42,7 +42,7 @@
 
             
           // Timer
-          $this->RegisterTimer("ReolinkCamera_UpdateTimer", 0, 'ReolinkCamera_Update($_IPS[\'TARGET\']);');
+          $this->RegisterTimer("ReolinkNVR_UpdateTimer", 0, 'ReolinkNVR_Update($_IPS[\'TARGET\']);');
         }
  
         public function ApplyChanges() {
@@ -60,9 +60,9 @@
 		  
             // Set Timer
             if ( $this->ReadPropertyInteger("UpdateFrequency") > 0 ) {
-                $this->SetTimerInterval("ReolinkCamera_UpdateTimer", $this->ReadPropertyInteger("UpdateFrequency")*1000);
+                $this->SetTimerInterval("ReolinkNVR_UpdateTimer", $this->ReadPropertyInteger("UpdateFrequency")*1000);
             } else { 
-                $this->SetTimerInterval("ReolinkCamera_UpdateTimer", 0 );
+                $this->SetTimerInterval("ReolinkNVR_UpdateTimer", 0 );
             }
                
             // Set Data to Variables (and update timer)
@@ -70,7 +70,7 @@
         } 
         
         public function Destroy() {
-            $this->SetTimerInterval( "ReolinkCamera_UpdateTimer", 0 );
+            $this->SetTimerInterval( "ReolinkNVR_UpdateTimer", 0 );
             // Never delete this line!
             parent::Destroy();
         }
