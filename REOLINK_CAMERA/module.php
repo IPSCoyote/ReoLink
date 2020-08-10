@@ -74,7 +74,7 @@
             /* Login to Camera - here a token is reused, of not logged out before! */
             if ( $this->ReolinkLogin( trim($this->ReadPropertyString("Username")), trim($this->ReadPropertyString("Password")) ) === true ) {
                 // Get MD State
-                SetValue($this->GetIDForIdent("motionDetected"), ReolinkGetMdState() );
+                SetValue($this->GetIDForIdent("motionDetected"), $this->ReolinkGetMdState() );
             } else {
                 $this->toDebugLog( "Update failed" );
                 return false;
