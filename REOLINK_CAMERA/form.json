@@ -21,6 +21,7 @@
       { "code": 203, "icon": "error",       "caption": "No Data returned from IP" },
       { "code": 204, "icon": "error",       "caption": "No Reolink Camera available at IP" },
       { "code": 205, "icon": "error",       "caption": "Invalid or No User Data" },
-      { "code": 206, "icon": "error",       "caption": "No Login possible" }
+      { "code": 206, "icon": "error",       "caption": "No Login possible" },
+      { "code": 207, "icon": "error",       "caption": "Device does not fit" }
     ]
 }

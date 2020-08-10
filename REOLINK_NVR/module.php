@@ -144,11 +144,19 @@
                 // Login successfull, get user abilities
                 $this->ReolinkGetAbility();
                 $this->ReolinkGetDevInfo();
-                
+                                                
                 // logout
                 if ( $this->ReolinkLogout() == false ) {
                        return false;
                 }
+            }
+                   
+            $DeviceInfo = json_decode( $this->ReadAttributeString( "DeviceInfo" ) );
+            if ( ( !isset( $DeviceInfo["channelNum"] ) ) OR 
+                 ( $DeviceInfo["channelNum"] <= 1 ) ) {
+              // device is no NVR (only one camera channel)
+              $this->SetStatus(207); // No Login possible
+              return false;
             }
                    
             $this->SetStatus(102);
