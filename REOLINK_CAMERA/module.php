@@ -1,6 +1,14 @@
 <?php
 
+
+
     class ReolinkCamera extends IPSModule {
+ 
+         /*=== COMMON FUNCTIONS ============== */
+        include '../common/commonFunctions.php';
+        
+        /*=== COMMON FUNCTIONS ============== */
+        include '../common/reolinkFunctions.php';
  
         public function __construct($InstanceID) {
           /* Constructor is called before each function call */
@@ -165,12 +173,6 @@
             
         }
         
-        
-        /*=== COMMON FUNCTIONS ============== */
-        include '../common/commonFunctions.php';
-        
-        /*=== COMMON FUNCTIONS ============== */
-        include '../common/reolinkFunctions.php';
         
     }
 ?>
