@@ -17,8 +17,8 @@
             $this->toDebugLog( "ReolinkLogin called" );
             $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=Login" );
             $command["cmd"] = "Login";
-            $command["param"]["User"]["userName"] = trim($this->ReadPropertyString("Username");
-            $command["param"]["User"]["password"] = trim($this->ReadPropertyString("Password");
+            $command["param"]["User"]["userName"] = trim($this->ReadPropertyString("Username"));
+            $command["param"]["User"]["password"] = trim($this->ReadPropertyString("Password"));
             $jsonParam = "[".json_encode( $command )."]";
             curl_setopt($ch, CURLOPT_POST, 1) ;
             curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonParam );
