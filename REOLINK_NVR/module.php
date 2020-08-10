@@ -143,7 +143,7 @@
             } else {
                 // Login successfull, get user abilities
                 $this->ReolinkGetAbility();
-                $this->GetDevInfo();
+                $this->ReolinkGetDevInfo();
                 
                 // logout
                 if ( $this->ReolinkLogout() == false ) {
