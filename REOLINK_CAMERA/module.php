@@ -176,8 +176,8 @@
             
             // if a token is present but close to timeout (last 5 minutes), first logout and then retrieve a new token
             // if a valid token is present, just confirm true
-            if ( ( $this->ReadAttributeString ("Token" ) != "" ) and
-                 ( $this->ReadAttributeString ("TokenTimeout" ) - 300 < time()  ) ) {
+            if ( ( $this->ReadAttributeString("Token" ) != "" ) and
+                 ( $this->ReadAttributeString("TokenTimeout" ) - 300 < time()  ) ) {
                 $this->ReolinkLogout( $this->ReadAttributeString ("Token" ) );
             } elseif ( $this->ReadAttributeString ("Token" ) != "" ) {
                 return true;
@@ -215,7 +215,7 @@
                 return false;
             }
             
-            $file = "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=Logout&token=".$this->ReadAttributeString ("Token" );
+            $file = "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=Logout&token=".$this->ReadAttributeString("Token" );
             $response = file_get_contents( $file );
             $responseArray = json_decode( $response, true );
             $this->WriteAttributeString( "Token", "" );
@@ -233,12 +233,12 @@
         protected function ReolinkGetMdState( $channel = 0 ) {
             $this->toDebugLog( "ReolinkGetMdState called" );
             
-            if ( $this->ReadAttributeString ("Token" ) == "" ) {
+            if ( $this->ReadAttributeString("Token" ) == "" ) {
                 $this->toDebugLog( "GetMdState not possible; no Token present; Login first" );
                 return false;
             }
             
-            $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=GetMdState&token=".$this->ReadAttributeString ("Token" ) );
+            $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=GetMdState&token=".$this->ReadAttributeString("Token" ) );
             $command["cmd"] = "GetMdState";
             $command["param"]["channel"] = $channel;
             $jsonParam = "[".json_encode( $command )."]";
@@ -265,12 +265,12 @@
         protected function ReolinkGetAbility( $username ) {
             $this->toDebugLog( "ReolinkGetAbility called" );
             
-            if ( $this->ReadAttributeString ("Token" ) == "" ) {
+            if ( $this->ReadAttributeString("Token" ) == "" ) {
                 $this->toDebugLog( "GetAbility not possible; no Token present; Login first" );
                 return false;
             }
             
-            $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=GetAbility&token=".$this->ReadAttributeString ("Token" ) );
+            $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=GetAbility&token=".$this->ReadAttributeString("Token" ) );
             $command["cmd"] = "GetAbility";
             $command["param"]["User"]["userName"] = $username;
             $jsonParam = "[".json_encode( $command )."]"; 
@@ -287,7 +287,6 @@
                 } else
                     return false;
             } else {
-                
             return false;
             }
         }
@@ -295,12 +294,12 @@
         protected function ReolinkGetDevInfo( $Token ) {
             $this->toDebugLog( "ReolinkGetDevInfo called" );
             
-            if ( $this->ReadAttributeString ("Token" ) == "" ) {
+            if ( $this->ReadAttributeString("Token" ) == "" ) {
                 $this->toDebugLog( "GetDevInfo not possible; no Token present; Login first" );
                 return false;
             }
             
-            $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=GetDevInfo&token=".$this->ReadAttributeString ("Token" ) );
+            $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=GetDevInfo&token=".$this->ReadAttributeString("Token" ) );
             $command["cmd"] = "GetDevInfo";
             $jsonParam = "[".json_encode( $command )."]";
             curl_setopt($ch, CURLOPT_POST, 1) ;
