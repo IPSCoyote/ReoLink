@@ -128,6 +128,8 @@
         protected function ReolinkGetDevInfo() {
             $this->toDebugLog( "ReolinkGetDevInfo called" );
             
+            $this->WriteAttributeString( "DeviceInfo", "" );    
+                    
             if ( $this->ReadAttributeString("Token" ) == "" ) {
                 $this->toDebugLog( "GetDevInfo not possible; no Token present; Login first" );
                 return false;
@@ -145,7 +147,9 @@
             curl_close( $ch );
             if (isset( $responseArray[0]["code"] ) ) {
                 if ( $responseArray[0]["code"] == 0 ) {
-                return $responseArray[0]["value"]["DevInfo"];
+                    $this->WriteAttributeString( "UserAbility", json_encode( $responseArray[0]["value"]["DevInfo"] ) );
+
+                return true;
                 } else
                     return false;
             } else {

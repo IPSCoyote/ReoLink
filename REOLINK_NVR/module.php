@@ -33,7 +33,8 @@
           $this->RegisterAttributeString( "Token", ""); 
           $this->RegisterAttributeInteger( "TokenTimeout", 0 ); 
           $this->RegisterAttributeString( "UserAbility", "" );
-          
+          $this->RegisterAttributeString( "DeviceInfo", "" );
+                    
           // Login handling für method UPDATE
           $this->RegisterPropertyString("LoginToken", "" );
           $this->RegisterPropertyString("LoginTimestamp", "" );
@@ -142,6 +143,7 @@
             } else {
                 // Login successfull, get user abilities
                 $this->ReolinkGetAbility();
+                $this->GetDevInfo();
                 
                 // logout
                 if ( $this->ReolinkLogout() == false ) {
