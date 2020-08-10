@@ -1,3 +1,7 @@
+<?php
+
+    trait reolinkFunctions {
+
         /*=== REOLINK NATIVE FUNCTIONS ============== */
         protected function ReolinkLogin() {
             
@@ -154,3 +158,7 @@
               $this->SendDebug( "Reolink Camera", $string, 0 );
           }
         }
+        
+    }
+
+?>

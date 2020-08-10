@@ -1,15 +1,16 @@
 <?php
 
-
+    /*=== INCLUDE TRAITS =============================*/
+    /*=== COMMON FUNCTIONS ========================== */
+    include ( "../common/commonFunctions.php ");
+    
+    /*=== COMMON FUNCTIONS ========================== */
+    include '../common/reolinkFunctions.php';
 
     class ReolinkCamera extends IPSModule {
  
-         /*=== COMMON FUNCTIONS ============== */
-        include '../common/commonFunctions.php';
-        
-        /*=== COMMON FUNCTIONS ============== */
-        include '../common/reolinkFunctions.php';
- 
+        use commonFunctions, reolinkFunctions;       
+
         public function __construct($InstanceID) {
           /* Constructor is called before each function call */
           parent::__construct($InstanceID);

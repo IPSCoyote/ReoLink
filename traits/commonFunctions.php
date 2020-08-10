@@ -1,3 +1,7 @@
+<?php
+
+    trait commonFunctions {
+    
         protected function ping($host, $port, $timeout) 
         { 
             ob_start();
@@ -7,3 +11,6 @@
             return true; 
         }
         
+    }
+    
+?>
