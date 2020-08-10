@@ -177,7 +177,7 @@
             // if a token is present but close to timeout (last 5 minutes), first logout and then retrieve a new token
             // if a valid token is present, just confirm true
             if ( ( $this->ReadAttributeString("Token" ) != "" ) and
-                 ( $this->ReadAttributeString("TokenTimeout" ) - 300 < time()  ) ) {
+                 ( $this->ReadAttributeInteger("TokenTimeout" ) - 300 < time()  ) ) {
                 $this->ReolinkLogout( $this->ReadAttributeString ("Token" ) );
             } elseif ( $this->ReadAttributeString ("Token" ) != "" ) {
                 return true;
