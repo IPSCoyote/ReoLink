@@ -2,7 +2,7 @@
 
     /*=== INCLUDE TRAITS =============================*/
     /*=== COMMON FUNCTIONS ========================== */
-    include "../../../traits/commonFunctions.php";
+    include __DIR__ . "../../traits/commonFunctions.php";
     
     /*=== COMMON FUNCTIONS ========================== */
     include "../traits/reolinkFunctions.php";
