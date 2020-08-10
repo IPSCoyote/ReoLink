@@ -20,6 +20,10 @@
           $this->RegisterPropertyInteger("UpdateFrequency", 0);  
           $this->RegisterPropertyBoolean("DebugLog", false );
           
+          // Attributes of the Module
+          $this->RegisterAttributeString("Token", ""); 
+          $this->RegisterAttributeInteger("TokenTimeout", 0 ); 
+          
           // Login handling für method UPDATE
           $this->RegisterPropertyString("LoginToken", "" );
           $this->RegisterPropertyString("LoginTimestamp", "" );
@@ -67,12 +71,19 @@
         public function Update() {
         	$this->toDebugLog( "Update called" );
 
-            /* Check the connection to the go-eCharger */
-            $reolinkCameraStatus = $this->getStatusFromCamera();
-            if ( $reolinkCameraStatus == false ) { return false; }
-       
-            // write values into variables
-            /* SetValue($this->GetIDForIdent("status"),                  $goEChargerStatus->{'car'});    */
+            /* Login to Camera - here a token is reused, of not logged out before! */
+            if ( $this->ReolinkLogin( trim($this->ReadPropertyString("Username")), trim($this->ReadPropertyString("Password")) ) === true ) {
+                // Get MD State
+                SetValue($this->GetIDForIdent("motionDetected"), ReolinkGetMdState() );
+            } else {
+                $this->toDebugLog( "Update failed" );
+                return false;
+            }
+
+            /* Log out, if time is not active */
+            if ( $this->GetTimerInterval( "ReolinkCamera_UpdateTimer" ) == 0 ) {
+                $this->ReolinkLogout();
+            }
                 
             return true;
         }
@@ -105,6 +116,9 @@
                 return false;
             }
             
+            // logout first (if possible) as user/password might have changed
+            $this->ReolinkLogout( )
+            
             // check user name and login
             if ( ( trim($this->ReadPropertyString("Username")) == "" ) or ( trim($this->ReadPropertyString("Password")) == "" ) ) {
                 $this->SetStatus(205); // Invalid or No User Data
@@ -112,14 +126,13 @@
                 return false;   
             }
 
-            // Try test login and gather user data
-            $LoginToken = $this->ReolinkLogin( trim($this->ReadPropertyString("Username")), trim($this->ReadPropertyString("Password")) );      
-            if ( $LoginToken === false ) {
+            // Try test login and gather user data   
+            if ( $this->ReolinkLogin( trim($this->ReadPropertyString("Username")), trim($this->ReadPropertyString("Password")) ) === false ) {
                 $this->SetStatus(206); // No Login possible
                 return false;
             } else {
                 // logout
-                if ( $this->ReolinkLogout( $LoginToken ) == false ) {
+                if ( $this->ReolinkLogout( ) == false ) {
                        return false;
                 }
             }
@@ -128,18 +141,6 @@
             $this->toDebugLog( "Configuration ok" );
             return true;
         }
-        
-        protected function getStatusFromCamera() {
-            $this->toDebugLog( "getStatusFromCamera called" );
-            
-            // get IP of Device from configuration
-            $IPAddress = trim($this->ReadPropertyString("IPAddressDevice"));
-              
-                          
-            $this->SetStatus(102);
-            return true;        }
-        
-       
         
         protected function ping($host, $port, $timeout) 
         { 
@@ -172,6 +173,16 @@
         
         /*=== REOLINK NATIVE FUNCTIONS ============== */
         protected function ReolinkLogin( $username, $password ) {
+            
+            // if a token is present but close to timeout (last 5 minutes), first logout and then retrieve a new token
+            // if a valid token is present, just confirm true
+            if ( ( $this->ReadAttributeString ("Token" ) != "" ) and
+                 ( $this->ReadAttributeString ("TokenTimeout" ) - 300 < time()  ) ) {
+                $this->ReolinkLogout( $this->ReadAttributeString ("Token" ) );
+            } elseif ( $this->ReadAttributeString ("Token" ) != "" ) {
+                return true;
+            }
+            
             $this->toDebugLog( "ReolinkLogin called" );
             $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=Login" );
             $command["cmd"] = "Login";
@@ -187,18 +198,28 @@
             curl_close( $ch );
             if (isset( $responseArray[0]["value"]["Token"]["name"] ) ) {
                 $this->toDebugLog( "Token Received" );
-                return $responseArray[0]["value"]["Token"]["name"];
+                $this->WriteAttributeString( "Token", $responseArray[0]["value"]["Token"]["name"] );
+                $this->WriteAttributeInteger( "TokenTimeout", time() + $responseArray[0]["value"]["Token"]["leaseTime"] );
+                return true;
             } else {
                 $this->toDebugLog( "Login failed" );
                 return false;
             }
         }
 
-        protected function ReolinkLogout( $Token ) {
+        protected function ReolinkLogout( ) {
             $this->toDebugLog( "ReolinkLogout called" );
-            $file = "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=Logout&token=".$Token;
+            
+            if ( $this->ReadAttributeString ("Token" ) == "" ) {
+                $this->toDebugLog( "Logout failed as no token present" );
+                return false;
+            }
+            
+            $file = "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=Logout&token=".$this->ReadAttributeString ("Token" );
             $response = file_get_contents( $file );
             $responseArray = json_decode( $response, true );
+            $this->WriteAttributeString( "Token", "" );
+            $this->WriteAttributeString( "TokenTimeout", "" );
             if (isset( $responseArray[0]["code"] ) ) {
                 $this->toDebugLog( "Logout successfull" );
                 return !$responseArray[0]["code"];
@@ -209,9 +230,15 @@
             }
         }
 
-        protected function ReolinkGetMdState( $Token, $channel = 0 ) {
+        protected function ReolinkGetMdState( $channel = 0 ) {
             $this->toDebugLog( "ReolinkGetMdState called" );
-            $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=GetMdState&token=".$Token );
+            
+            if ( $this->ReadAttributeString ("Token" ) == "" ) {
+                $this->toDebugLog( "GetMdState not possible; no Token present; Login first" );
+                return false;
+            }
+            
+            $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=GetMdState&token=".$this->ReadAttributeString ("Token" ) );
             $command["cmd"] = "GetMdState";
             $command["param"]["channel"] = $channel;
             $jsonParam = "[".json_encode( $command )."]";
@@ -235,9 +262,15 @@
             }
         }
         
-        protected function ReolinkGetAbility( $Token, $username ) {
+        protected function ReolinkGetAbility( $username ) {
             $this->toDebugLog( "ReolinkGetAbility called" );
-            $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=GetAbility&token=".$Token );
+            
+            if ( $this->ReadAttributeString ("Token" ) == "" ) {
+                $this->toDebugLog( "GetAbility not possible; no Token present; Login first" );
+                return false;
+            }
+            
+            $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=GetAbility&token=".$this->ReadAttributeString ("Token" ) );
             $command["cmd"] = "GetAbility";
             $command["param"]["User"]["userName"] = $username;
             $jsonParam = "[".json_encode( $command )."]";
@@ -260,7 +293,13 @@
         
         protected function ReolinkGetDevInfo( $Token ) {
             $this->toDebugLog( "ReolinkGetDevInfo called" );
-            $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=GetDevInfo&token=".$Token );
+            
+            if ( $this->ReadAttributeString ("Token" ) == "" ) {
+                $this->toDebugLog( "GetDevInfo not possible; no Token present; Login first" );
+                return false;
+            }
+            
+            $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=GetDevInfo&token=".$this->ReadAttributeString ("Token" ) );
             $command["cmd"] = "GetDevInfo";
             $jsonParam = "[".json_encode( $command )."]";
             curl_setopt($ch, CURLOPT_POST, 1) ;
