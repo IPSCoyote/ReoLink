@@ -80,21 +80,32 @@
         */
         
         public function Update() {
-        	//$this->toDebugLog( "Update called" );
+        	$this->toDebugLog( "Update called" );
 
-            /* Login to Camera - here a token is reused, of not logged out before!            if ( $this->ReolinkLogin( trim($this->ReadPropertyString("Username")), trim($this->ReadPropertyString("Password")) ) === true ) {
+            // use device info 
+            $DeviceInfo = json_decode( $this->ReadAttributeString( "DeviceInfo" ), true );
+            $ChannelCount = 0;
+            if ( isset( $DeviceInfo["channelNum"] ) ) {
+                $ChannelCount = $DeviceInfo["channelNum"];
+            }
+
+            /* Login to Camera - here a token is reused, of not logged out before!  */
+            if ( $this->ReolinkLogin( trim($this->ReadPropertyString("Username")), trim($this->ReadPropertyString("Password")) ) === true ) {
                 // Get MD State
-                SetValue($this->GetIDForIdent("motionDetected"), $this->ReolinkGetMdState() );
+                for ( $currentChannel=0; $currentChannel<$ChannelCount; $x++ ) {
+                  $Ident = "motionDetected_Channel_".$currentChannel;        
+                  SetValue($this->GetIDForIdent($Ident), $this->ReolinkGetMdState( $currentChannel ) );
+                }
             } else {
                 $this->toDebugLog( "Update failed" );
                 return false;
             }
 
-            /* Log out, if time is not active
+            /* Log out, if time is not active */
             if ( $this->GetTimerInterval( "ReolinkCamera_UpdateTimer" ) == 0 ) {
                 $this->ReolinkLogout();
             }
-          */
+ 
             return true;
         }
                
@@ -178,9 +189,20 @@
         
         protected function registerVariables() {
             
-            //--- Basic Information -------------------------------------------------------------
-            //$this->RegisterVariableBoolean("motionDetected", "Bewegung","~Motion",11);
+            $DeviceInfo = json_decode( $this->ReadAttributeString( "DeviceInfo" ), true );
+            $ChannelCount = 0;
+            if ( isset( $DeviceInfo["channelNum"] ) ) {
+                $ChannelCount = $DeviceInfo["channelNum"];
+            }
             
+            //--- Basic Information -------------------------------------------------------------
+            // Setup Motion Detection
+            for ( $currentChannel=0; $currentChannel<$ChannelCount; $currentChannel++ ) { 
+              $Ident = "motionDetected_Channel_".$currentChannel;        
+              $Label = "Bewegung Kamera ".$currentChannel;    
+              $Position = 11+$currentChannel;
+              $this->RegisterVariableBoolean( $Ident, $Label, "~Motion", $Position );
+            }
         }
         
         
