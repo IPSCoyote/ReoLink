@@ -167,10 +167,10 @@
         
         
         /*=== COMMON FUNCTIONS ============== */
-        include( "../common/commonFunctions.php" );
+        include '../common/commonFunctions.php';
         
         /*=== COMMON FUNCTIONS ============== */
-        include( "../common/reolinkFunctions.php" );
+        include '../common/reolinkFunctions.php';
         
     }
 ?>
