@@ -219,7 +219,7 @@
             $response = file_get_contents( $file );
             $responseArray = json_decode( $response, true );
             $this->WriteAttributeString( "Token", "" );
-            $this->WriteAttributeString( "TokenTimeout", "" );
+            $this->WriteAttributeString( "TokenTimeout", 0 );
             if (isset( $responseArray[0]["code"] ) ) {
                 $this->toDebugLog( "Logout successfull" );
                 return !$responseArray[0]["code"];
