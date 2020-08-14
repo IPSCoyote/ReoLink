@@ -99,7 +99,7 @@
             return true;
         }
         
-        public function StoreImageProfile( $profileName ) {
+        public function StoreImageProfile( string $profileName ) {
         	$this->toDebugLog( "StoreImageProfile called" );
         	
             /* Login to Camera - here a token is reused, of not logged out before! */
