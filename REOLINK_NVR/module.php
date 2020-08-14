@@ -69,10 +69,7 @@
             // $this->Update();
         } 
         
-        public function Destroy() {
-            if ( $this->ReadPropertyInteger("UpdateFrequency") > 0 )
-                $this->SetTimerInterval( "ReolinkNVR_UpdateTimer", 0 );
-                
+        public function Destroy() {              
             // Never delete this line!
             parent::Destroy();
         }
