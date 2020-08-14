@@ -70,7 +70,9 @@
         } 
         
         public function Destroy() {
-            $this->SetTimerInterval( "ReolinkCamera_UpdateTimer", 0 );
+            if ( $this->ReadPropertyInteger("UpdateFrequency") > 0 )
+                $this->SetTimerInterval( "ReolinkCamera_UpdateTimer", 0 );
+                
             // Never delete this line!
             parent::Destroy();
         }

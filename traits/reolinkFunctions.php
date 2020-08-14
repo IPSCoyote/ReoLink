@@ -61,7 +61,7 @@
             }
         }
 
-        protected function ReolinkGetMdState( $channel = 0 ) {
+        protected function ReolinkGetMdState( int $channel = 0 ) {
             $this->toDebugLog( "ReolinkGetMdState called" );
             
             if ( $this->ReadAttributeString("Token" ) == "" ) {
@@ -156,7 +156,7 @@
             }
         }
         
-        function ReolinkGetImage( $channel = 0 ) {
+        function ReolinkGetImage( int $channel = 0 ) {
             $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=GetImage&token=".$this->ReadAttributeString("Token" ) );
             $command["cmd"] = "GetImage";
             $command["action"] = "1";
@@ -179,7 +179,7 @@
             }
         }
 
-        function ReolinkSetImage( $ImageArray, $channel = 0 ) {
+        function ReolinkSetImage( $ImageArray, int $channel = 0 ) {
             $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=SetImage&token=".$this->ReadAttributeString("Token" ) );
             $command["cmd"] = "SetImage";
             $command["param"]["Image"] = $ImageArray;
