@@ -71,7 +71,7 @@ Vor der Installation des Moduls in IPSymcon sollte die Reolink Kamera oder der N
 Derzeit bietet das GIT zwei Module. Einmal das Modul "REOLINK_CAMERA" für die direkte Anbindung einer einzelnen Kamera sowie das Modul "REOLINK_NVR" für den Zugriff auf einen NVR. Beide Module bieten folgende Funktionen an:
 
 ### 4.1. REOLINK_CAMERA
-Das Modul "REOLINK_CAMERA" dient als Schnittstelle zu einer lokal installieten Kamera. 
+Das Modul "REOLINK_CAMERA" dient als Schnittstelle zu einer lokal installieten Kamera. Es legt eine Variable für die Bewegungserkennung sowie eine Variable für die Bild-Profile an.
 
 #### 4.1.1. Unterstützte Befehle
 
@@ -89,7 +89,7 @@ ReolinkCamera_ActivateImageProfile( integer InstanceID, string profileName ); //
 ```
 
 ### 4.2. REOLINK_NVR
-Das Modul "REOLINK_NVR" dient als Schnittstelle zu einem lokal installierten NVR
+Das Modul "REOLINK_NVR" dient als Schnittstelle zu einem lokal installierten NVR. Es legt je vorhandenem Kamera-Kanal eine Variable für die Bewegungserkennung sowie eine Variable für die Bild-Profile an.
 
 #### 4.2.1. Unterstützte Befehle
 
