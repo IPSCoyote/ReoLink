@@ -108,7 +108,7 @@
             return true;
         }
                
-        public function StoreImageProfile( string $profileName, int $channel ) {
+        public function StoreImageProfile( int $channel, string $profileName ) {
         	$this->toDebugLog( "StoreImageProfile called" );
         	
             /* Login to Camera - here a token is reused, of not logged out before! */
@@ -137,7 +137,7 @@
             // Login Conection is kept alive 
         }
         
-        public function RemoveImageProfile( string $profileName, int $channel ) {
+        public function RemoveImageProfile( int $channel, string $profileName  ) {
             $this->toDebugLog( "RemoveImageProfile called" );
             $profiles = json_decode( GetValue( $this->GetIDForIdent("imageProfiles_Channel_".$channel) ), true );
             if ( isset( $profiles[$profileName] ) ) {
@@ -156,7 +156,7 @@
             return SetValue( $this->GetIDForIdent("imageProfiles_Channel_".$channel), json_encode( $profiles ) );
         }
             
-        public function ActivateImageProfile( string $profileName, int $channel ) {
+        public function ActivateImageProfile( int $channel, string $profileName ) {
             $this->toDebugLog( "ActivateImageProfile called" );
             $profiles = json_decode( GetValue( $this->GetIDForIdent("imageProfiles_Channel_".$channel) ), true );
             if ( isset( $profiles[$profileName] ) ) { 
