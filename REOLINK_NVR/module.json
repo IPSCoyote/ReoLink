@@ -3,7 +3,7 @@
     "name": "Reolink NVR",
     "type": 3,
     "vendor": "Reolink",
-    "aliases":
+    "aliases": 
     [
         "Reolink Kameraserver (NVR)"
     ],  
