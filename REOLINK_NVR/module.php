@@ -111,6 +111,79 @@
             return true;
         }
                
+        public function StoreImageProfile( string $profileName, int $channel ) {
+        	$this->toDebugLog( "StoreImageProfile called" );
+        	
+            /* Login to Camera - here a token is reused, of not logged out before! */
+            if ( $this->ReolinkLogin( trim($this->ReadPropertyString("Username")), trim($this->ReadPropertyString("Password")) ) === true ) {
+                // Get MD State
+                $imageData = array();
+                $imageData = $this->ReolinkGetImage( $channel );
+                if ( $imageData != false ) {
+                    // store data to profile
+                    // get existing profiles 
+                    $profiles = json_decode( GetValue( $this->GetIDForIdent("imageProfiles_Channel_".$channel) ), true );
+                    if ( $profiles == "" ) {
+                        $profiles = array();
+                    }
+                    $profiles[$profileName] = $imageData;
+                    return SetValue( $this->GetIDForIdent("imageProfiles_Channel_".$channel), json_encode( $profiles ) );
+                } else {
+                    // store of profile failed
+                    return false;
+                }
+            } else {
+                $this->toDebugLog( "StoreImageProfile called" );
+                return false;
+            }
+            
+            // Login Conection is kept alive 
+        }
+        
+        public function RemoveImageProfile( string $profileName, int $channel ) {
+            $this->toDebugLog( "RemoveImageProfile called" );
+            $profiles = json_decode( GetValue( $this->GetIDForIdent("imageProfiles_Channel_".$channel) ), true );
+            if ( isset( $profiles[$profileName] ) ) {
+                // remove image profile
+                unset( $profiles[$profileName] );
+                return SetValue( $this->GetIDForIdent("imageProfiles_Channel_".$channel), json_encode( $profiles ) );
+            } else {
+                return false;
+            }
+        }
+        
+        public function RemoveAllImageProfiles( int $channel ) {
+            $this->toDebugLog( "RemoveAllImageProfiles called" );
+
+            $profiles = array();
+            return SetValue( $this->GetIDForIdent("imageProfiles_Channel_".$channel), json_encode( $profiles ) );
+        }
+            
+        public function ActivateImageProfile( string $profileName, int $channel ) {
+            $this->toDebugLog( "ActivateImageProfile called" );
+            $profiles = json_decode( GetValue( $this->GetIDForIdent("imageProfiles_Channel_".$channel) ), true );
+            if ( isset( $profiles[$profileName] ) ) { 
+                $imageData = $profiles[$profileName];
+                if ( $this->ReolinkLogin( trim($this->ReadPropertyString("Username")), trim($this->ReadPropertyString("Password")) ) === true ) {
+                    // get abilities
+                    $abilities = $this->ReolinkGetAbility();
+                    if ( isset( $abilities["abilityChn"][0]["image"]["permit"] ) and $abilities["abilityChn"][0]["image"]["permit"] == 6 ) {
+                        // set image profile to camera
+                        return $this->ReolinkSetImage( $imageData, $channel );
+                    } else {
+                        $this->toDebugLog( "No sufficient user rights to set image data" );
+                        return false;
+                    } 
+                } else {
+                    $this->toDebugLog( "Login failed" );
+                    return false;
+                }
+            } else {
+                $this->toDebugLog( "ImageProfile ".$profileName." does not exist" );
+                return false;
+            }
+        }
+               
         //=== Modul Funktionen =========================================================================================
         /* Internal Functions
         */
@@ -197,13 +270,18 @@
                 $ChannelCount = $DeviceInfo["channelNum"];
             }
             
-            //--- Basic Information -------------------------------------------------------------
-            // Setup Motion Detection
+            //--- Camera based Information -------------------------------------------------------------
             for ( $currentChannel=0; $currentChannel<$ChannelCount; $currentChannel++ ) { 
-              $Ident = "motionDetected_Channel_".$currentChannel;        
-              $Label = "Bewegung Kamera ".$currentChannel;    
-              $Position = 11+$currentChannel;
-              $this->RegisterVariableBoolean( $Ident, $Label, "~Motion", $Position );
+                $Ident = "motionDetected_Channel_".$currentChannel;        
+                $Label = "Bewegung Kamera ".$currentChannel;    
+                $Position = 11+$currentChannel;
+                //--- Basic Information -------------------------------------------------------------
+                $this->RegisterVariableBoolean( $Ident, $Label, "~Motion", $Position );
+                //--- Settings
+                $Ident = "imageProfiles_Channel_".$currentChannel;        
+                $Label = "ImageProfilesChannel ".$currentChannel;
+                $Position = 51+$currentChannel;
+                $this->RegisterVariableString("imageProfiles", "ImageProfiles","",$Position);
             }
         }
         
