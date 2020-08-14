@@ -101,19 +101,20 @@
             return true;
         }
         
-        public function StoreImageProfile( $profileName ) {
+        public function StoreImageProfile( string $profileName ) {
         	$this->toDebugLog( "StoreImageProfile called" );
         	
             /* Login to Camera - here a token is reused, of not logged out before! */
             if ( $this->ReolinkLogin( trim($this->ReadPropertyString("Username")), trim($this->ReadPropertyString("Password")) ) === true ) {
                 // Get MD State
+                $imageData = array();
                 $imageData = $this->ReolinkGetImage( );
                 if ( $imageData != false ) {
                     // store data to profile
                     // get existing profiles 
-                    $profiles = json_decode( GetValue( $this->GetIDForIdent("imageProfiles") ) );
+                    $profiles = json_decode( GetValue( $this->GetIDForIdent("imageProfiles") ), true );
                     if ( $profiles == "" ) {
-                        $profiles = [];
+                        $profiles = array();
                     }
                     $profiles[$profileName] = $imageData;
                     
