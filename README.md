@@ -27,7 +27,7 @@ Das Ziel des Moduls ist eine bessere Einbindung in die IPS Haussteuerung um "Lü
 Jedes Modul enthält boolsche Variablen je Kamera welche angeben, ob die Kamera eine Bewegung erkannt hat. Voraussetzung ist aktives Update-Interval (da nur dann die Daten in abhängigkeit des Intervals abgerufen werden.
 
 ### 1.2. Bildeinstellungen / Bildprofile
-Ein Problem ist die Tatsache, das es bei unterschiedlichen Lichtverhältnissen sinnvoll sein kann, die Bild-Einstellungen (Helligkeit, usw.) anders einzustellen. Aus diesem Grund unterstützten die Module Bild-Profile (ImageProfiles). Man kann mittels Befehlen je Kamera die aktuellen Bildeinstellungen als Profil (mit eigenem Namen) speichern und dieses auch wieder abrufen (in die Kamera senden). So kann man dann z.B. mit einem eigenen Skript zwischen einem "Tag" und einem "Nachtprofil" umschalten. 
+Ein Problem ist die Tatsache, das es bei unterschiedlichen Lichtverhältnissen sinnvoll sein kann, die Bild-Einstellungen (Helligkeit, usw.) anders einzustellen. Aus diesem Grund unterstützten die Module "Bild-Profile" (ImageProfiles). Man kann mittels Befehlen je Kamera die aktuellen Bildeinstellungen als Profil (mit eigenem Namen) speichern und dieses auch wieder abrufen (in die Kamera senden). So kann man dann z.B. mit einem eigenen Skript zwischen einem "Tag" und einem "Nachtprofil" umschalten. 
 
 Beispielhaft erklärt für eine einzelne Kamera:
 
@@ -43,7 +43,7 @@ ReolinkCamera_StoreImageProfile( 12345, "Nacht" );
 ```
 das "Nacht"-Profil abspeichern.
 
-3. Nun in einem helligkeits- oder Zeitgesteuertem Skript einfach das gewünschte Profil abrufen
+3. Nun in einem helligkeits- oder zeitgesteuertem Skript einfach das gewünschte Profil abrufen
 ```php
 ReolinkCamera_ActivateImageProfile( 12345, "Nacht" );
 ```
@@ -73,7 +73,40 @@ Derzeit bietet das GIT zwei Module. Einmal das Modul "REOLINK_CAMERA" für die d
 ### 4.1. REOLINK_CAMERA
 Das Modul "REOLINK_CAMERA" dient als Schnittstelle zu einer lokal installieten Kamera. 
 
-### 4.1. REOLINK_NVR
+#### 4.1.1. Unterstützte Befehle
+
+1. Kameradaten aktualisieren (geschieht bei positivem Update Interval automatisch)
+```php
+ReolinkCamera_Update( integer InstanceID ); 
+```
+
+2. Bildprofile speichern/aktualisieren, löschen oder aktivieren
+```php
+ReolinkCamera_StoreImageProfile( integer InstanceID, string profileName );
+ReolinkCamera_RemoveImageProfiles( integer InstanceID, string profileName );
+ReolinkCamera_RemoveAllImageProfile( integer InstanceID, string profileName );
+ReolinkCamera_ActivateImageProfile( integer InstanceID, string profileName ); // ACHTUNG! Admin-Rechte des Benutzers erforderlich!
+```
+
+### 4.2. REOLINK_NVR
 Das Modul "REOLINK_NVR" dient als Schnittstelle zu einem lokal installierten NVR
+
+#### 4.2.1. Unterstützte Befehle
+
+Als Channel ist die Kamera-Kanalnummer der Kamera im Reolink NVR zu verwenden. 
+
+1. Kameradaten aktualisieren (geschieht bei positivem Update Interval automatisch)
+```php
+ReolinkNVR_Update( integer InstanceID, integer Channel ); 
+```
+
+2. Bildprofile speichern/aktualisieren, löschen oder aktivieren
+```php
+ReolinkNVR_StoreImageProfile( integer InstanceID, string profileName, integer Channel );
+ReolinkNVR_RemoveImageProfiles( integer InstanceID, string profileName, integer Channel  );
+ReolinkNVR_RemoveAllImageProfile( integer InstanceID, string profileName, integer Channel  );
+ReolinkNVR_ActivateImageProfile( integer InstanceID, string profileName, integer Channel  ); // ACHTUNG! Admin-Rechte des Benutzers erforderlich!
+```
+
 
 ## 5. Versionshistorie
