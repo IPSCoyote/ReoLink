@@ -162,9 +162,11 @@
                         return $this->ReolinkSetImage( $imageData );
                     } else {
                         $this->toDebugLog( "No sufficient user rights to set image data" );
+                        return false;
                     } 
                 } else {
                     $this->toDebugLog( "Login failed" );
+                    return false;
                 }
             } else {
                 $this->toDebugLog( "ImageProfile ".$profileName." does not exist" );
