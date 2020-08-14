@@ -190,8 +190,6 @@
             $command["param"]["Image"] = $ImageArray;
             $command["param"]["Image"]["channel"] = $channel;
             $jsonParam = "[".json_encode( $command )."]";
-            $this->toDebugLog( $jsonParam );
-
             curl_setopt($ch, CURLOPT_POST, 1) ;
             curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonParam );
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json') );
