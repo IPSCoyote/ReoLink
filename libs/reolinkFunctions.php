@@ -200,11 +200,8 @@
             $responseArray = json_decode( $response, true );
             curl_close( $ch );
             if (isset( $responseArray[0]["code"] ) ) {
-                 $this->toDebugLog( $responseArray[0]["code"] );
-
-                return $responseArray[0]["code"];
+                return $responseArray[0]["code"] == 0;
             } else {
-                $this->toDebugLog( "Set Image failed" );
                 return false;
             }
         }
