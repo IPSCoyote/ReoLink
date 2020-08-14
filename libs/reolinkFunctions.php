@@ -157,6 +157,8 @@
         }
         
         function ReolinkGetImage( int $channel = 0 ) {
+            $this->toDebugLog( "ReolinkGetImage called" );
+
             $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=GetImage&token=".$this->ReadAttributeString("Token" ) );
             $command["cmd"] = "GetImage";
             $command["action"] = "1";
@@ -180,12 +182,16 @@
         }
 
         function ReolinkSetImage( array $ImageArray, int $channel = 0 ) {
+            $this->toDebugLog( "ReolinkSetImage called" );
+            
             $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=SetImage&token=".$this->ReadAttributeString("Token" ) );
             $command["cmd"] = "SetImage";
             $command["param"]["Image"] = array();
             $command["param"]["Image"] = $ImageArray;
             $command["param"]["Image"]["channel"] = $channel;
             $jsonParam = "[".json_encode( $command )."]";
+            $this->toDebugLog( $jsonParam );
+
             curl_setopt($ch, CURLOPT_POST, 1) ;
             curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonParam );
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json') );
