@@ -130,6 +130,17 @@
             
             // Login Conection is kept alive 
         }
+        
+        public function RemoveImageProfile( string $profileName ) {
+            $profiles = json_decode( GetValue( $this->GetIDForIdent("imageProfiles") ), true );
+            if ( isset( $profiles[$profileName] ) ) {
+                // remove image profile
+                unset( $profiles[$profileName] );
+                SetValue( $this->GetIDForIdent("imageProfiles"), json_encode( $profiles ) );
+            } else {
+                return false;
+            }
+        }
                
         //=== Modul Funktionen =========================================================================================
         /* Internal Functions
