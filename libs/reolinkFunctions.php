@@ -117,7 +117,7 @@
             if (isset( $responseArray[0]["code"] ) ) {
                 if ( $responseArray[0]["code"] == 0 ) {
                     $this->WriteAttributeString( "UserAbility", json_encode( $responseArray[0]["value"]["Ability"] ) );
-                return true;
+                return $responseArray[0]["value"]["Ability"];
                 } else
                     return false;
             } else {
