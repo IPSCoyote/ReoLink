@@ -157,7 +157,7 @@
                 if ( $this->ReolinkLogin( trim($this->ReadPropertyString("Username")), trim($this->ReadPropertyString("Password")) ) === true ) {
                     // get abilities
                     $abilities = $this->ReolinkGetAbility();
-                    if ( isset( $abilities["abilityChn"][0]["image"] ) and $abilities["abilityChn"][0]["image"] == 6 ) {
+                    if ( isset( $abilities["abilityChn"][0]["image"]["permit"] ) and $abilities["abilityChn"][0]["image"]["permit"] == 6 ) {
                         // set image profile to camera
                         return $this->ReolinkSetImage( $imageData );
                     } else {
