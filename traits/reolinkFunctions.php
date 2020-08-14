@@ -179,9 +179,10 @@
             }
         }
 
-        function ReolinkSetImage( $ImageArray, int $channel = 0 ) {
+        function ReolinkSetImage( array $ImageArray, int $channel = 0 ) {
             $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=SetImage&token=".$this->ReadAttributeString("Token" ) );
             $command["cmd"] = "SetImage";
+            $command["param"]["Image"] = array();
             $command["param"]["Image"] = $ImageArray;
             $command["param"]["Image"]["channel"] = $channel;
             $jsonParam = "[".json_encode( $command )."]";
