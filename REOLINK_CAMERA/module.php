@@ -98,6 +98,35 @@
                 
             return true;
         }
+        
+        public function StoreImageProfile( $profileName ) {
+        	$this->toDebugLog( "StoreImageProfile called" );
+        	
+            /* Login to Camera - here a token is reused, of not logged out before! */
+            if ( $this->ReolinkLogin( trim($this->ReadPropertyString("Username")), trim($this->ReadPropertyString("Password")) ) === true ) {
+                // Get MD State
+                $imageData = $this->ReolinkGetImage( );
+                if ( $imageData != false ) {
+                    // store data to profile
+                    // get existing profiles 
+                    $profiles = json_decode( GetValue( $this->GetIDForIdent("imageProfiles") ) );
+                    if ( $profiles == "" ) {
+                        $profiles = [];
+                    }
+                    $profiles[$profileName] = $imageData;
+                    
+                    SetValue( $this->GetIDForIdent("imageProfiles"), json_encode( $profiles ) );
+                } else {
+                    // store of profile failed
+                    return false;
+                }
+            } else {
+                $this->toDebugLog( "StoreImageProfile called" );
+                return false;
+            }
+            
+            // Login Conection is kept alive 
+        }
                
         //=== Modul Funktionen =========================================================================================
         /* Internal Functions
@@ -181,6 +210,10 @@
             
             //--- Basic Information -------------------------------------------------------------
             $this->RegisterVariableBoolean("motionDetected", "Bewegung","~Motion",11);
+            
+            //--- Settings
+            $this->RegisterVariableString("imageProfiles", "ImageProfiles","",50);
+
             
         }
         

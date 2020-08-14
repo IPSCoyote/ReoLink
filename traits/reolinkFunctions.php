@@ -156,6 +156,49 @@
             }
         }
         
+        function ReolinkGetImage( $channel = 0 ) {
+            $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=GetImage&token=".$this->ReadAttributeString("Token" ) );
+            $command["cmd"] = "GetImage";
+            $command["action"] = "1";
+            $command["param"]["channel"] = $channel;
+            $jsonParam = "[".json_encode( $command )."]";
+            curl_setopt($ch, CURLOPT_POST, 1) ;
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonParam );
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json') );
+            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+            $response = curl_exec($ch); 
+            $responseArray = json_decode( $response, true );
+            curl_close( $ch );
+            if (isset( $responseArray[0]["code"] ) ) {
+                if ( $responseArray[0]["code"] == 0 ) {
+                    return $responseArray[0]["value"]["Image"];
+                } else
+                return false;
+            } else {
+                return false;
+            }
+        }
+
+        function ReolinkSetImage( $ImageArray, $channel = 0 ) {
+            $ch = curl_init( "http://".trim($this->ReadPropertyString("IPAddressDevice"))."/api.cgi?cmd=SetImage&token=".$this->ReadAttributeString("Token" ) );
+            $command["cmd"] = "SetImage";
+            $command["param"]["Image"] = $ImageArray;
+            $command["param"]["Image"]["channel"] = $channel;
+            $jsonParam = "[".json_encode( $command )."]";
+            curl_setopt($ch, CURLOPT_POST, 1) ;
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonParam );
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json') );
+            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+            $response = curl_exec($ch); 
+            $responseArray = json_decode( $response, true );
+            curl_close( $ch );
+            if (isset( $responseArray[0]["code"] ) ) {
+                return $responseArray[0]["code"];
+            } else {
+                return false;
+            }
+        }
+   
     }
 
 ?>
