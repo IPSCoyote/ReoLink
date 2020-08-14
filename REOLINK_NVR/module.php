@@ -278,7 +278,7 @@
                 $Ident = "imageProfiles_Channel_".$currentChannel;        
                 $Label = "ImageProfilesChannel ".$currentChannel;
                 $Position = 51+$currentChannel;
-                $this->RegisterVariableString("imageProfiles", "ImageProfiles","",$Position);
+                $this->RegisterVariableString($Ident, $Label,"",$Position);
             }
         }
         
