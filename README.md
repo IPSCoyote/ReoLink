@@ -34,26 +34,26 @@ Beispielhaft erklärt für eine einzelne Kamera:
 1. Bildeinstellungen in der Kamera für den Tag vornehmen, dann mittels 
 ```php
 ReolinkCamera_StoreImageProfile( 12345, "Tag" ); 
-´´´
+```
 das "Tag"-Profil abspeichern.
 
 2. Bildeinstellungen in der Kamera für die Nacht vornehmen, dann mittels 
 ```php
 ReolinkCamera_StoreImageProfile( 12345, "Nacht" ); 
-´´´
+```
 das "Nacht"-Profil abspeichern.
 
 3. Nun in einem helligkeits- oder Zeitgesteuertem Skript einfach das gewünschte Profil abrufen
 ```php
 ReolinkCamera_ActivateImageProfile( 12345, "Nacht" );
-´´´
+```
 
 Die Anzahl der Profile je Kamera ist nicht eingeschränkt. Die Profile werden in Instanz-Variablen gespeichert und können dort auch über die Konsole bearbeitet werden. Zusätzlich können die Profile auch mittels
 ```php
 ReolinkCamera_RemoveImageProfile( 12345, "Tag" );
 
 ReolinkCamera_RemoveAllImageProfiles( 12345 );
-´´´
+```
 einzeln oder komplett gelöscht werden.
 
 ## 2. Systemanforderungen
