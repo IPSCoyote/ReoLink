@@ -157,6 +157,7 @@
                 $imageData = $profiles[$profileName];
                 if ( $this->ReolinkLogin( trim($this->ReadPropertyString("Username")), trim($this->ReadPropertyString("Password")) ) === true ) {
                     return $this->ReolinkSetImage( $imageData );
+                }
             } else {
                 $this->toDebugLog( "ImageProfile ".$profileName." does not exist" );
                 return false;
