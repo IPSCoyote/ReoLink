@@ -117,8 +117,7 @@
                         $profiles = array();
                     }
                     $profiles[$profileName] = $imageData;
-                    
-                    SetValue( $this->GetIDForIdent("imageProfiles"), json_encode( $profiles ) );
+                    return SetValue( $this->GetIDForIdent("imageProfiles"), json_encode( $profiles ) );
                 } else {
                     // store of profile failed
                     return false;
@@ -132,12 +131,34 @@
         }
         
         public function RemoveImageProfile( string $profileName ) {
+            $this->toDebugLog( "RemoveImageProfile called" );
             $profiles = json_decode( GetValue( $this->GetIDForIdent("imageProfiles") ), true );
             if ( isset( $profiles[$profileName] ) ) {
                 // remove image profile
                 unset( $profiles[$profileName] );
-                SetValue( $this->GetIDForIdent("imageProfiles"), json_encode( $profiles ) );
+                return SetValue( $this->GetIDForIdent("imageProfiles"), json_encode( $profiles ) );
             } else {
+                return false;
+            }
+        }
+               
+        public function RemoveAllImageProfiles( ) {
+            $this->toDebugLog( "RemoveAllImageProfiles called" );
+
+            $profiles = array();
+            return SetValue( $this->GetIDForIdent("imageProfiles"), json_encode( $profiles ) );
+        }
+        
+        public function ActivateImageProfile( string $profileName ) {
+            $this->toDebugLog( "ActivateImageProfile called" );
+            $profiles = json_decode( GetValue( $this->GetIDForIdent("imageProfiles") ), true );
+            if ( isset( $profiles[$profileName] ) ) {
+                // set image profile to camera
+                $imageData = $profiles[$profileName];
+                if ( $this->ReolinkLogin( trim($this->ReadPropertyString("Username")), trim($this->ReadPropertyString("Password")) ) === true ) {
+                    return $this->ReolinkSetImage( $imageData );
+            } else {
+                $this->toDebugLog( "ImageProfile ".$profileName." does not exist" );
                 return false;
             }
         }
