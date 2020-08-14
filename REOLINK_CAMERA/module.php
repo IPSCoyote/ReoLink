@@ -161,6 +161,7 @@
                         // set image profile to camera
                         return $this->ReolinkSetImage( $imageData );
                     } else {
+                        $this->toDebugLog( $abilities["abilityChn"][0]["image"] );
                         $this->toDebugLog( "No sufficient user rights to set image data" );
                         return false;
                     } 
