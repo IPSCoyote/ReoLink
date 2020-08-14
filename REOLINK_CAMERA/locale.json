@@ -5,7 +5,7 @@
             "IPAddressDevice": "IP Adresse der Kamera",
             "Username": "Benutzername",
             "Password": "Passwort",
-            "UpdateFrequency": "Update Interval",
+            "Update Frequency": "Update Interval",
             
             "Basic Data": "Grunddaten",
             "seconds": "Sekunden",
