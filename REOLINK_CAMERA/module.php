@@ -152,11 +152,17 @@
         public function ActivateImageProfile( string $profileName ) {
             $this->toDebugLog( "ActivateImageProfile called" );
             $profiles = json_decode( GetValue( $this->GetIDForIdent("imageProfiles") ), true );
-            if ( isset( $profiles[$profileName] ) ) {
-                // set image profile to camera
+            if ( isset( $profiles[$profileName] ) ) { 
                 $imageData = $profiles[$profileName];
                 if ( $this->ReolinkLogin( trim($this->ReadPropertyString("Username")), trim($this->ReadPropertyString("Password")) ) === true ) {
-                    return $this->ReolinkSetImage( $imageData );
+                    // get abilities
+                    $abilities = $this->ReolinkGetAbility();
+                    if ( isset( $abilities["abilityChn"][0]["image"] ) and $abilities["abilityChn"][0]["image"] == 6 ) {
+                        // set image profile to camera
+                        return $this->ReolinkSetImage( $imageData );
+                    } else {
+                        $this->toDebugLog( "No sufficient user rights to set image data" );
+                    } 
                 } else {
                     $this->toDebugLog( "Login failed" );
                 }

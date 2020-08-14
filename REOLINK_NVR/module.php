@@ -2,10 +2,10 @@
 
     /*=== INCLUDE TRAITS =============================*/
     /*=== COMMON FUNCTIONS ========================== */
-    include __DIR__ . '/../traits/commonFunctions.php';
+    include __DIR__ . '/../libs/commonFunctions.php';
     
     /*=== COMMON FUNCTIONS ========================== */
-    include __DIR__ . '/../traits/reolinkFunctions.php';
+    include __DIR__ . '/../libs/reolinkFunctions.php';
 
     class ReolinkNVR extends IPSModule {
  
