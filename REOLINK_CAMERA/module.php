@@ -124,7 +124,7 @@
                 return false;
             }
             
-            // Login Conection is kept alive 
+            // Login Connection is kept alive
         }
         
         public function RemoveImageProfile( string $profileName ) {
@@ -170,7 +170,22 @@
                 return false;
             }
         }
-               
+
+        public function GetSnapshot( ) {
+            $this->toDebugLog( "GetImage called" );
+            $image = $this->ReolinkSnap(0 );
+            if ($image != false) {
+                $mediaID = IPS_GetMediaIDByName("Snapshot", $this->InstanceID);
+                if ( $mediaID != false ) {
+                    $base64 = base64_encode($image);
+                    IPS_SetMediaContent($mediaID, $base64 );
+                }
+            } else {
+                $this->toDebugLog("No Result");
+            }
+        }
+
+
         //=== Modul Funktionen =========================================================================================
         /* Internal Functions
         */
@@ -257,7 +272,15 @@
             //--- Settings
             $this->RegisterVariableString("imageProfiles", "ImageProfiles","",50);
 
-            
+            //--- Images
+            if (@IPS_GetMediaIDByName("Snapshot", $this->InstanceID) == false ) {
+                $createdMediaID = IPS_CreateMedia(MEDIATYPE_IMAGE);
+                IPS_SetName($createdMediaID, "Snapshot");
+                IPS_Sleep(2000);
+                IPS_SetMediaCached($createdMediaID, true);
+                IPS_SetMediaFile($createdMediaID, "Snapshot".$this->InstanceID.".jpg", false);
+                IPS_SetParent($createdMediaID, $this->InstanceID);
+            }
         }
         
         protected function toDebugLog( $string ) {

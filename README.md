@@ -58,7 +58,8 @@ einzeln oder komplett gelöscht werden.
 
 ## 2. Systemanforderungen
 - IP-Symcon ab Version 5.4 (tiefere Versionen können funktionieren, wurden aber nicht getestet)
-- getestet mit RLN16-410, RLC-410W, RLC-511W, RLC-420 E1 Pro 
+- getestet mit RLN16-410, RLC-410W, RLC-511W, RLC-420
+- Nicht kompatible Kameras: E1 Pro 
 
 Es können nicht alle Kameras getestet und somit kann auch nicht die Funktion mit allen Kameras sichergestellt werden!
 
